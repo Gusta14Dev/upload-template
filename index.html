@@ -8,44 +8,121 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="css/tiny-slider.css">
+
     <style>
-        #container-preview{
-            display: inline-block;
+        button{
+            border: none;
+            margin: 0;
+            padding: 0;
+            width: auto;
+            overflow: visible;
+
+            background: transparent;
+
+            /* inherit font & color from ancestor */
+            color: inherit;
+            font: inherit;
+
+            /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+            line-height: normal;
+
+            /* Corrects font smoothing for webkit */
+            -webkit-font-smoothing: inherit;
+            -moz-osx-font-smoothing: inherit;
+
+            /* Corrects inability to style clickable `input` types in iOS */
+            -webkit-appearance: none;
         }
-        .img-preview{
-            transform: translateY(20%);
-            width: 200px;
-            height: 100px;
-            background-color: aqua;
-            border-radius: 5px;
-            border:none;
+        /* Remove excess padding and border in Firefox 4+ */
+        &::-moz-focus-inner {
+            border: 0;
+            padding: 0;
+        }
+        .xz{
+            width:70%;
+        }
+        .image-preview{
+            height: 50px;
             margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .excluir{
+            color: white;
+            line-height: 1;
+            padding: 0;
+            font-weight: bold;
+            border-radius: 10px;
+            text-align: center;
+            border: none;
+            width: 20px;
+            height: 20px;
+            background-color: brown;
+            cursor: pointer;
+        }
+        .excluir:hover{
+            background-color: rgb(139, 32, 32);
         }
     </style>
 </head>
 <body>
-    
-    <div class="form-row">
-        <input type="file" style="display: none;" name="fotos[]" id="fotos" multiple>
-        <div class="form-group col-md-3 p-5">
-            <label for='fotos' class="border border-primary text-primary text-center h3 p-4 pb-2 rounded" style="cursor: pointer;"> Adicionar fotos <p class="h1">+</p></label>
+    <div class="form-row xz">
+        <input type="file" accept="image/*" style="display: none;" name="fotos[]" id="fotos" multiple>
+        <div class="form-group col-md-3">
+            <label for='fotos' class="border border-primary text-primary text-center h3 p-4 pb-2 rounded" style="cursor: pointer;"> Adicionar fotos<p class="h1">+</p></label>
         </div>
-        <div class="form-group col-md-9 p-5 owl-carousel owl-theme" id="container-preview">
-            <img src="reica-imoveis.png" class="img-preview">
-            <img src="reica-imoveis.png" class="img-preview">
-            <img src="reica-imoveis.png" class="img-preview">
-            <img src="reica-imoveis.png" class="img-preview">
-            <img src="reica-imoveis.png" class="img-preview">
-            <img src="reica-imoveis.png" class="img-preview">
-            <img src="reica-imoveis.png" class="img-preview">
-            <img src="reica-imoveis.png" class="img-preview">
-            <img src="reica-imoveis.png" class="img-preview">
+        <div class="form-group col-md-9">
+            <div id="my-slider">
+            </div>
         </div>
+        
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>    
-    <script src="owl-carousel.min.js"></script>
+    <script src="js/tiny-slider.js"></script>
+
+    <script>
+
+        function previewImages() {
+
+            
+            document.querySelector('#my-slider').innerHTML = '';
+            var preview = document.querySelector('#my-slider');
+
+            if (this.files) {
+            [].forEach.call(this.files, readAndPreview);
+            }
+
+            function readAndPreview(file) {
+
+                // Make sure `file.name` matches our extensions criteria
+                if (!/\.(jpe?g|png|gif|svg)$/i.test(file.name)) {
+                    return alert(file.name + " isso não é uma imagem");
+                } // else...
+                
+                var reader = new FileReader();
+                
+                reader.addEventListener("load", function() {
+                    var image = new Image();
+                    image.classList.add("image-preview");
+                    image.title  = file.name;
+                    image.src    = this.result;
+                    preview.appendChild(image);
+                    i = i+1;
+                });
+                
+                reader.readAsDataURL(file);
+                
+                console.log(i);
+            }
+
+        }
+
+        document.querySelector('#fotos').addEventListener("change", previewImages);
+        var i = 0; 
+    </script>
+    <div class="excluir">x</div>
 </body>
 </html>
